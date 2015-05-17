@@ -250,7 +250,7 @@ namespace PortableDeviceLib
         {
             lock (dispatcher)
             {
-                Enumerate(ref pContent, parent.ID, parent, enumerateHelper, detectNewObjects: true);
+                Enumerate(ref pContent, parent.ID, parent, new AllObjectEnumerateHelper(), detectNewObjects: true);
             }
         }
 
