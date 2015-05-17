@@ -1,0 +1,1560 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>clipr</name>
+    </assembly>
+    <members>
+        <member name="T:clipr.Core.ArgumentAttribute">
+            <summary>
+            Base class for various argument types.
+            </summary>
+        </member>
+        <member name="T:clipr.Arguments.IArgument">
+            <summary>
+            Basic properties of an argument.
+            </summary>
+        </member>
+        <member name="P:clipr.Arguments.IArgument.Name">
+            <summary>
+            Name of the argument. Used as a last resort for choosing a
+            display name.
+            </summary>
+        </member>
+        <member name="P:clipr.Arguments.IArgument.Description">
+            <summary>
+            Description of the argument value. Used when
+            generating usage documentation.
+            </summary>
+        </member>
+        <member name="P:clipr.Arguments.IArgument.NumArgs">
+            <summary>
+            Number of arguments consumed by this property.
+            See <see cref="P:clipr.Arguments.IArgument.Constraint"/> for information on
+            whether this number is the minimum, maximum, or exact
+            number of arguments allowed. Defaults to 1 and should
+            never be 0 (actions that take no parameters will ignore
+            this property).
+            </summary>
+        </member>
+        <member name="P:clipr.Arguments.IArgument.Constraint">
+            <summary>
+            Specifies whether or not <see cref="P:clipr.Arguments.IArgument.NumArgs"/> defines
+            the minimum, maximum, or exact number of arguments allowed.
+            </summary>
+        </member>
+        <member name="P:clipr.Arguments.IArgument.MetaVar">
+            <summary>
+            Defines an alternate character to be used as a placeholder
+            for the argument value in usage documentation. By default,
+            the alternate name is generated from the property itself.
+            </summary>
+        </member>
+        <member name="P:clipr.Arguments.IArgument.Const">
+            <summary>
+            The constant value stored instead of an argument for some
+            <see cref="T:clipr.ParseAction"/>s.
+            </summary>
+        </member>
+        <member name="P:clipr.Arguments.IArgument.Action">
+            <summary>
+            Action to perform when parsing this parameter.
+            </summary>
+        </member>
+        <member name="P:clipr.Arguments.IArgument.ConsumesMultipleArgs">
+            <summary>
+            Whether or not the argument can handle a
+            variable number of arguments.
+            </summary>
+        </member>
+        <member name="P:clipr.Arguments.IArgument.MutuallyExclusiveGroups">
+            <summary>
+            List of mutually exclusive groups the argument has joined.
+            Only one argument in a group may be specified on the command
+            line at a time.
+            </summary>
+        </member>
+        <member name="P:clipr.Arguments.IArgument.Store">
+            <summary>
+            Backing store for the argument. Parsed values are set on
+            this property.
+            </summary>
+        </member>
+        <member name="M:clipr.Core.ArgumentAttribute.#ctor">
+            <summary>
+            Create a new ArgumentAttribute.
+            </summary>
+        </member>
+        <member name="P:clipr.Core.ArgumentAttribute.Name">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Core.ArgumentAttribute.MutuallyExclusiveGroups">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Core.ArgumentAttribute.Description">
+            <summary>
+            Description of the argument value. Used when
+            generating usage documentation.
+            </summary>
+        </member>
+        <member name="P:clipr.Core.ArgumentAttribute.NumArgs">
+            <summary>
+            Number of arguments consumed by this property.
+            See <see cref="P:clipr.Core.ArgumentAttribute.Constraint"/> for information on
+            whether this number is the minimum, maximum, or exact
+            number of arguments allowed. Defaults to 1 and should
+            never be 0 (actions that take no parameters will ignore
+            this property).
+            </summary>
+        </member>
+        <member name="P:clipr.Core.ArgumentAttribute.ExplicitlySetConstraint">
+            <summary>
+            Determine whether or not the constraint was explicitly set by
+            the user.
+            </summary>
+        </member>
+        <member name="P:clipr.Core.ArgumentAttribute.Constraint">
+            <summary>
+            Specifies whether or not <see cref="P:clipr.Core.ArgumentAttribute.NumArgs"/> defines
+            the minimum, maximum, or exact number of arguments allowed.
+            </summary>
+        </member>
+        <member name="P:clipr.Core.ArgumentAttribute.MetaVar">
+            <summary>
+            Defines an alternate character to be used as a placeholder
+            for the argument value in usage documentation. By default,
+            the alternate name is generated from the property itself.
+            </summary>
+        </member>
+        <member name="P:clipr.Core.ArgumentAttribute.Const">
+            <summary>
+            The constant value stored instead of an argument for some
+            <see cref="T:clipr.ParseAction"/>s.
+            </summary>
+        </member>
+        <member name="P:clipr.Core.ArgumentAttribute.Action">
+            <summary>
+            Action to perform when parsing this parameter.
+            </summary>
+        </member>
+        <member name="P:clipr.Core.ArgumentAttribute.ConsumesMultipleArgs">
+            <summary>
+            Whether or not the argument can handle a
+            variable number of arguments.
+            </summary>
+        </member>
+        <member name="P:clipr.Core.ArgumentAttribute.HasVariableNumArgs">
+            <summary>
+            Whether or not the argument can handle a
+            variable number of arguments.
+            </summary>
+        </member>
+        <member name="P:clipr.Core.ArgumentAttribute.Store">
+            <inheritdoc/>
+        </member>
+        <member name="T:clipr.Core.IValueStoreDefinition">
+            <summary>
+            Defines the interface for storing a parsed value into the
+            configuration object.
+            </summary>
+        </member>
+        <member name="M:clipr.Core.IValueStoreDefinition.SetValue(System.Object,System.Object)">
+            <summary>
+            Set this value of object <paramref name="source"/>
+            to <paramref name="value"/>.
+            </summary>
+            <param name="source">Configuration instance</param>
+            <param name="value">Value to store</param>
+        </member>
+        <member name="M:clipr.Core.IValueStoreDefinition.GetValue(System.Object)">
+            <summary>
+            Gets this value of object <paramref name="source"/>.
+            </summary>
+            <param name="source">Configuration instance</param>
+            <returns></returns>
+        </member>
+        <member name="P:clipr.Core.IValueStoreDefinition.Name">
+            <summary>
+            Name of the storage area (e.g. property name).
+            </summary>
+        </member>
+        <member name="P:clipr.Core.IValueStoreDefinition.Converters">
+            <summary>
+            Additional converters for the object.
+            </summary>
+            <value>The converters.</value>
+        </member>
+        <member name="P:clipr.Core.IValueStoreDefinition.Type">
+            <summary>
+            The value's type.
+            </summary>
+        </member>
+        <member name="P:clipr.Fluent.Verb`1.And">
+            <summary>
+            Return to the parser.
+            </summary>
+        </member>
+        <member name="T:clipr.StaticEnumerationAttribute">
+            <summary>
+            Marks a class as an enumeration with static readonly fields. When
+            generating usage information, all static readonly fields will be
+            displayed as options.
+            </summary>
+        </member>
+        <member name="T:clipr.Usage.EnumerationDescriptionAttribute">
+            <summary>
+            Describes a specific enum value
+            </summary>
+        </member>
+        <member name="F:clipr.Usage.EnumerationDescriptionAttribute.Description">
+            <summary>
+            Text description
+            </summary>
+        </member>
+        <member name="M:clipr.Usage.EnumerationDescriptionAttribute.#ctor(System.String)">
+            <summary>
+            Create a description for a specific enum value
+            </summary>
+            <param name="description"></param>
+        </member>
+        <member name="T:clipr.ArgumentIntegrityException">
+            <summary>
+            The exception that is thrown when the set of arguments
+            supplied to the parser are invalid.
+            </summary>
+        </member>
+        <member name="M:clipr.ArgumentIntegrityException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the
+            <see cref="T:clipr.ArgumentIntegrityException"/> class.
+            </summary>
+            <param name="message">Description of the exception.</param>
+        </member>
+        <member name="M:clipr.ArgumentIntegrityException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the
+            <see cref="T:clipr.ArgumentIntegrityException"/> class.
+            </summary>
+            <param name="message">Description of the exception.</param>
+            <param name="innerException">Exception being wrapped.</param>
+        </member>
+        <member name="T:clipr.Arguments.ILongNameArgument">
+            <summary>
+            Basic properties of a long argument.
+            </summary>
+        </member>
+        <member name="T:clipr.Arguments.INamedArgumentBase">
+            <summary>
+            Properties that apply to both short and long named arguments.
+            </summary>
+        </member>
+        <member name="P:clipr.Arguments.INamedArgumentBase.Required">
+            <summary>
+            Whether or not this named argument is required.
+            </summary>
+        </member>
+        <member name="P:clipr.Arguments.ILongNameArgument.LongName">
+            <summary>
+            Longer, multi-character name for the argument.
+            </summary>
+        </member>
+        <member name="T:clipr.Arguments.INamedArgument">
+            <summary>
+            A combination of short and long named arguments.
+            </summary>
+        </member>
+        <member name="T:clipr.Arguments.IShortNameArgument">
+            <summary>
+            A named argument with a single character name.
+            </summary>
+        </member>
+        <member name="P:clipr.Arguments.IShortNameArgument.ShortName">
+            <summary>
+            Single character name for the argument.
+            </summary>
+        </member>
+        <member name="T:clipr.Arguments.BaseArgument">
+            <summary>
+            Defines the basic properties of an argument.
+            </summary>
+        </member>
+        <member name="M:clipr.Arguments.BaseArgument.#ctor(clipr.Core.IValueStoreDefinition)">
+            <summary>
+            Create a new Argument.
+            </summary>
+        </member>
+        <member name="P:clipr.Arguments.PositionalArgument.Index">
+            <summary>
+            Index in the positional argument list for this argument.
+            </summary>
+        </member>
+        <member name="M:clipr.Core.IntegrityChecker.EnsureAttributeIntegrity``1">
+            <summary>
+            <para>
+            Iterate through all properties in <typeparamref name="T"/>
+            and make sure all ArgumentAttributes are defined correctly.
+            </para>
+            <para>
+            All argument integrity checks should be made prior to
+            parsing so that integrity issues will surface regardless of
+            arguments provided to the parser.
+            </para>
+            </summary>
+            <exception cref="T:clipr.Utils.AggregateException">
+            Contains all integrity violations found for the given type.
+            </exception>
+            <typeparam name="T">
+            Perform integrity check on this type.
+            </typeparam>
+        </member>
+        <member name="M:clipr.Core.IntegrityChecker.NumArgsGreaterThanZeroCheck(clipr.Arguments.IArgument)">
+            <summary>
+            NumArgs must not equal zero.
+            </summary>
+            <param name="attr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Core.IntegrityChecker.VarArgsConvertibleToIEnumerableCheck(System.Reflection.PropertyInfo,clipr.Arguments.IArgument)">
+            <summary>
+            Arguments that take multiple values must be convertible to IEnumerable.
+            </summary>
+            <param name="prop"></param>
+            <param name="attr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Core.IntegrityChecker.PositionalArgumentsCannotStoreConstValues(System.Reflection.PropertyInfo,clipr.Arguments.IArgument)">
+            <summary>
+            Positional arguments cannot store const values.
+            </summary>
+            <param name="prop"></param>
+            <param name="attr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Core.IntegrityChecker.PositionalArgumentsCannotAppendValues(System.Reflection.PropertyInfo,clipr.Arguments.IArgument)">
+            <summary>
+            Positional arguments cannot append values.
+            </summary>
+            <param name="prop"></param>
+            <param name="attr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Core.IntegrityChecker.PositionalArgumentsCannotStoreCount(System.Reflection.PropertyInfo,clipr.Arguments.IArgument)">
+            <summary>
+            Positional arguments cannot store a count.
+            </summary>
+            <param name="prop"></param>
+            <param name="attr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Core.IntegrityChecker.AppendConvertibleToIEnumerable(System.Reflection.PropertyInfo,clipr.Arguments.IArgument)">
+            <summary>
+            Append and AppendConst actions must be convertible to IEnumerable{T}.
+            </summary>
+            <param name="prop"></param>
+            <param name="attr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Core.IntegrityChecker.CountActionConvertibleToIntCheck(System.Reflection.PropertyInfo,clipr.Arguments.IArgument)">
+            <summary>
+            Count actions must be convertible to int.
+            </summary>
+            <param name="prop"></param>
+            <param name="attr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Core.IntegrityChecker.StoreTrueFalseConvertibleToBoolCheck(System.Reflection.PropertyInfo,clipr.Arguments.IArgument)">
+            <summary>
+            StoreTrue and StoreFalse actions must be convertible to bool.
+            </summary>
+            <param name="prop"></param>
+            <param name="attr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Core.IntegrityChecker.ConstActionsCannotHaveNullValueCheck(System.Reflection.PropertyInfo,clipr.Arguments.IArgument)">
+            <summary>
+            Const actions cannot have null value.
+            </summary>
+            <param name="prop"></param>
+            <param name="attr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Core.IntegrityChecker.ConvertibleConstValuesCheck(System.Reflection.PropertyInfo,clipr.Arguments.IArgument)">
+            <summary>
+            Const values must be convertible to the property type.
+            </summary>
+            <param name="prop"></param>
+            <param name="attr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Core.IntegrityChecker.LastPositionalArgumentCanTakeMultipleValuesCheck``1">
+            <summary>
+            Only last positional argument may take multiple values.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Core.IntegrityChecker.ConfigMayNotContainBothPositionalArgumentsAndVerbs``1">
+            <summary>
+            Configuration objects may not use both positional parameters
+            and verbs in the same object.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Core.IntegrityChecker.PostParseZeroParametersCheck``1">
+            <summary>
+            PostParse methods must take zero parameters.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:clipr.Core.IParserConfig`1">
+            <summary>
+            Configuration for the parser.
+            </summary>
+            <typeparam name="T">Option class.</typeparam>
+        </member>
+        <member name="M:clipr.Core.IParserConfig`1.InitializeTriggers(System.Collections.Generic.IEnumerable{clipr.Triggers.ITrigger{`0}})">
+            <summary>
+            Initialize all triggers.
+            </summary>
+            <param name="triggers"></param>
+        </member>
+        <member name="M:clipr.Core.IParserConfig`1.GetShortName(clipr.Arguments.IShortNameArgument)">
+            <summary>
+            Retrieve the short character from an argument or throw an exception.
+            </summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Core.IParserConfig`1.GetShortName(clipr.Arguments.IShortNameArgument,System.String)">
+            <summary>
+            Retrieve the short character from an argument or throw an exception.
+            </summary>
+            <param name="arg"></param>
+            <param name="errorMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Core.IParserConfig`1.GetLongName(clipr.Arguments.ILongNameArgument)">
+            <summary>
+            Retrieve the long name from an argument or throw an exception.
+            </summary>
+            <param name="arg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Core.IParserConfig`1.GetLongName(clipr.Arguments.ILongNameArgument,System.String)">
+            <summary>
+            Retrieve the long name from an argument or throw an exception.
+            </summary>
+            <param name="arg"></param>
+            <param name="errorMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="P:clipr.Core.IParserConfig`1.ArgumentPrefix">
+            <summary>
+            The character prefix to use for designating arguments
+            (typically a hyphen).
+            </summary>
+        </member>
+        <member name="P:clipr.Core.IParserConfig`1.Triggers">
+            <summary>
+            The list of registered triggers.
+            </summary>
+        </member>
+        <member name="T:clipr.CliParser">
+            <summary>
+            Static shortcuts for quickly parsing argument lists.
+            </summary>
+        </member>
+        <member name="M:clipr.CliParser.StrictParse``1(System.String[])">
+            <summary>
+            <para>
+            Parse the given argument list and return a new object
+            containing the converted arguments.
+            </para>
+            <para>
+            If parsing fails, error details are immediately written
+            to the error console and help information is displayed.
+            </para>
+            <para>
+            WARNING: This method may call <see cref="M:System.Environment.Exit(System.Int32)"/> on
+            error.
+            </para>
+            </summary>
+            <param name="args">Argument list to parse.</param>
+            <returns>
+            A new object containing values parsed from the argument list.
+            </returns>
+        </member>
+        <member name="M:clipr.CliParser.StrictParse``1(System.String[],``0)">
+            <summary>
+            <para>
+            Parse the given argument list.
+            </para>
+            <para>
+            If parsing fails, error details is immediately written
+            to the error console and help information is displayed.
+            </para>
+            <para>
+            WARNING: This method may call <see cref="M:System.Environment.Exit(System.Int32)"/> on
+            error.
+            </para>
+            </summary>
+            <param name="obj">Parsed arguments are stored here.</param>
+            <param name="args">Argument list to parse.</param>
+        </member>
+        <member name="M:clipr.CliParser.TryParse``1(System.String[],``0@)">
+            <summary>
+            Make an attempt to parse the arguments and return true if
+            parsing was successful. If parsing completed, the
+            <paramref name="obj"/> parameter will contain the constructed
+            and parsed object. If parsing fails, the object will be null.
+            </summary>
+            <typeparam name="TS"></typeparam>
+            <param name="args">Argument list to parse.</param>
+            <param name="obj">Newly created destination object or null if parsing failed.</param>
+            <returns>True if parsing succeeded.</returns>
+        </member>
+        <member name="M:clipr.CliParser.TryParse``1(System.String[],``0)">
+            <summary>
+            Make an attempt to parse the arguments and return true if
+            parsing was successful. If it returns false, the destination
+            object may be left in an incomplete state.
+            </summary>
+            <typeparam name="TS"></typeparam>
+            <param name="obj">Destination object.</param>
+            <param name="args">Argument list to parse.</param>
+            <returns>True if parsing succeeded.</returns>
+        </member>
+        <member name="M:clipr.CliParser.Parse``1(System.String[])">
+            <summary>
+            Parse the given argument list and return a new object
+            containing the converted arguments.
+            </summary>
+            <exception cref="T:clipr.ParseException">
+            An error happened while parsing.
+            </exception>
+            <exception cref="T:clipr.Core.ParserExit">
+            Either the help or version information were triggered so
+            parsing was aborted.
+            </exception>
+            <param name="args">Argument list to parse.</param>
+            <returns>
+            A new object containing values parsed from the argument list.
+            </returns>
+        </member>
+        <member name="M:clipr.CliParser.Parse``1(System.String[],``0)">
+            <summary>
+            Parse the given argument list.
+            </summary>
+            <exception cref="T:clipr.ParseException">
+            An error happened while parsing.
+            </exception>
+            <exception cref="T:clipr.Core.ParserExit">
+            Either the help or version information were triggered so
+            parsing was aborted.
+            </exception>
+            <param name="args">Argument list to parse.</param>
+            <param name="obj">Parsed arguments will be store here.</param>
+        </member>
+        <member name="T:clipr.CliParser`1">
+            <summary>
+            Parses a set of argument strings into an object.
+            </summary>
+            <typeparam name="TConf">Object type being deserialized.</typeparam>
+        </member>
+        <member name="M:clipr.CliParser`1.#ctor(`0)">
+            <summary>
+            Create a new parser with the default usage generator.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            The object used to store parsed argument values
+            is null.
+            </exception>
+            <exception cref="T:clipr.ArgumentIntegrityException">
+            Some argument is invalid.
+            </exception>
+            <exception cref="T:clipr.Utils.AggregateException">
+            Contains multiple <see cref="T:clipr.ArgumentIntegrityException"/>s
+            found while checking <see cref="T:clipr.Core.ArgumentAttribute"/>
+            integrity.
+            </exception>
+            <param name="obj">Store parsed values in this object.</param>
+        </member>
+        <member name="M:clipr.CliParser`1.#ctor(`0,clipr.ParserOptions)">
+            <summary>
+            Create a new parser with a set of options and the
+            default usage generator.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            The object used to store parsed argument values
+            is null.
+            </exception>
+            <exception cref="T:clipr.ArgumentIntegrityException">
+            Some argument is invalid.
+            </exception>
+            <exception cref="T:clipr.Utils.AggregateException">
+            Contains multiple <see cref="T:clipr.ArgumentIntegrityException"/>s
+            found while checking <see cref="T:clipr.Core.ArgumentAttribute"/>
+            integrity.
+            </exception>
+            <param name="obj">Store parsed values in this object.</param>
+            <param name="options">Extra options for the parser.</param>
+        </member>
+        <member name="M:clipr.CliParser`1.#ctor(`0,clipr.Usage.IHelpGenerator{`0})">
+            <summary>
+            Create a new parser with a custom usage generator.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            The object used to store parsed argument values
+            is null.
+            </exception>
+            <exception cref="T:clipr.ArgumentIntegrityException">
+            Some argument is invalid.
+            </exception>
+            <exception cref="T:clipr.Utils.AggregateException">
+            Contains multiple <see cref="T:clipr.ArgumentIntegrityException"/>s
+            found while checking <see cref="T:clipr.Core.ArgumentAttribute"/>
+            integrity.
+            </exception>
+            <param name="obj">Store parsed values in this object.</param>
+            <param name="usageGenerator">
+            Generates help documentation for this parser.
+            </param>
+        </member>
+        <member name="M:clipr.CliParser`1.#ctor(`0,clipr.ParserOptions,clipr.Usage.IHelpGenerator{`0})">
+            <summary>
+            Create a new parser with a set of options and a custom
+            usage generator.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">
+            The object used to store parsed argument values
+            is null.
+            </exception>
+            <exception cref="T:clipr.ArgumentIntegrityException">
+            Some argument is invalid.
+            </exception>
+            <exception cref="T:clipr.Utils.AggregateException">
+            Contains multiple <see cref="T:clipr.ArgumentIntegrityException"/>s
+            found while checking <see cref="T:clipr.Core.ArgumentAttribute"/>
+            integrity.
+            </exception>
+            <param name="obj">Store parsed values in this object.</param>
+            <param name="options">Extra options for the parser.</param>
+            <param name="usageGenerator">
+            Generates help documentation for this parser.
+            </param>
+        </member>
+        <member name="M:clipr.CliParser`1.StrictParse(System.String[])">
+            <summary>
+            <para>
+            Parses the given argument list.
+            </para>
+            <para>
+            If parsing fails, error details will immediately be written
+            to the error console and help information will be displayed.
+            </para>
+            <para>
+            WARNING: This method may call <see cref="M:System.Environment.Exit(System.Int32)"/> on
+            error.
+            </para>
+            </summary>
+            <param name="args">Argument list to parse.</param>
+            <returns>The object parsed from the argument list.</returns>
+        </member>
+        <member name="M:clipr.CliParser`1.TryParse(System.String[])">
+            <summary>
+            Make an attempt to parse the arguments and return true if
+            parsing was successful. If it returns false, the destination
+            object may be left in an incomplete state.
+            </summary>
+            <param name="args">Argument list to parse.</param>
+            <returns>True if parsing succeeded.</returns>
+        </member>
+        <member name="M:clipr.CliParser`1.Parse(System.String[])">
+            <summary>
+            Parse the given argument list.
+            </summary>
+            <exception cref="T:clipr.ParseException">
+            An error happened while parsing.
+            </exception>
+            <exception cref="T:clipr.Core.ParserExit">
+            Either the help or version information were triggered so
+            parsing was aborted.
+            </exception>
+            <param name="args">Argument list to parse.</param>
+        </member>
+        <member name="M:clipr.CliParser`1.HasNamedArgument``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Configure a named argument with a single value.
+            </summary>
+            <typeparam name="TArg">Argument type.</typeparam>
+            <param name="getExpr">
+            Getter expression describing where the value is stored.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.CliParser`1.HasNamedArgumentList``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Configure a named argument with multiple values.
+            </summary>
+            <typeparam name="TArg">Argument type.</typeparam>
+            <param name="getExpr">
+            Getter expression describing where the values are stored.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.CliParser`1.HasPositionalArgument``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Configure a positional argument with a single value.
+            </summary>
+            <typeparam name="TArg">Argument type.</typeparam>
+            <param name="getExpr">
+            Getter expression describing where the value is stored.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.CliParser`1.HasPositionalArgumentList``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Configure a positional argument with a multiple values.
+            </summary>
+            <typeparam name="TArg">Argument type.</typeparam>
+            <param name="getExpr">
+            Getter expression describing where the values are stored.
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.CliParser`1.HasVerb``1(System.String,System.Linq.Expressions.Expression{System.Func{`0,``0}},clipr.CliParser{``0})">
+            <summary>
+            Configure a verb containing sub-options.
+            </summary>
+            <typeparam name="TArg">Type containing the sub-options.</typeparam>
+            <param name="verbName">Name of the verb</param>
+            <param name="expr">Getter for the sub-option object</param>
+            <param name="subParser">A parser configured to parse the sub-options.</param>
+            <returns></returns>
+        </member>
+        <member name="P:clipr.CliParser`1.ArgumentPrefix">
+            <summary>
+            Punctuation character prefixed to short and long argument
+            names. Usually a hyphen (-).
+            </summary>
+            <exception cref="T:clipr.ArgumentIntegrityException">
+            Character is not valid punctuation.
+            </exception>
+        </member>
+        <member name="T:clipr.ApplicationInfoAttribute">
+            <summary>
+            Provides extra information about the main set of arguments.
+            </summary>
+        </member>
+        <member name="P:clipr.ApplicationInfoAttribute.Name">
+            <summary>
+            Name of the command/program.
+            </summary>
+        </member>
+        <member name="P:clipr.ApplicationInfoAttribute.Description">
+            <summary>
+            High level description of the command.
+            </summary>
+        </member>
+        <member name="T:clipr.Utils.AggregateException">
+            <summary>
+            An exception that aggregates multiple other exceptions together.
+            </summary>
+        </member>
+        <member name="M:clipr.Utils.AggregateException.#ctor(System.Collections.Generic.IEnumerable{System.Exception})">
+            <summary>
+            Create a new AggregateException instance that contains the
+            given exceptions.
+            </summary>
+            <param name="exceptions"></param>
+        </member>
+        <member name="M:clipr.Utils.AggregateException.Handle(System.Func{System.Exception,System.Boolean})">
+            <summary>
+            Handle each exception.
+            </summary>
+            <param name="handler"></param>
+        </member>
+        <member name="T:clipr.Utils.DotNet35Extensions">
+            <summary>
+            Extensions to convert .Net3.5-compatible code to the .Net4.5 syntax.
+            </summary>
+        </member>
+        <member name="M:clipr.Utils.DotNet35Extensions.HasFlag(clipr.ParserOptions,clipr.ParserOptions)">
+            <summary>
+            Checks whether or not the enum has the given flag set.
+            </summary>
+            <param name="en"></param>
+            <param name="cmp"></param>
+            <returns></returns>
+        </member>
+        <member name="T:clipr.Utils.DotNet40Extensions">
+            <summary>
+            Extensions to convert .Net4.0-compatible code to the .Net4.5 syntax.
+            </summary>
+        </member>
+        <member name="M:clipr.Utils.DotNet40Extensions.GetCustomAttribute``1(System.Reflection.MemberInfo)">
+            <summary>
+            Retrieve the only custom attribute of the given type. If
+            there is more than one, an exception will be thrown.
+            </summary>
+            <exception cref="T:System.Reflection.AmbiguousMatchException">
+            The member has multiple of the same custom attribute.
+            </exception>
+            <typeparam name="T">Attribute type to grab.</typeparam>
+            <param name="member"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Utils.DotNet40Extensions.GetCustomAttributes``1(System.Reflection.MemberInfo)">
+            <summary>
+            Get all custom attributes of the given type, generically.
+            </summary>
+            <typeparam name="T">Attribute type to retrieve.</typeparam>
+            <param name="member"></param>
+            <returns></returns>
+        </member>
+        <member name="T:clipr.MutuallyExclusiveGroupAttribute">
+            <summary>
+            <para>
+            Subscribes the property to a mutually exclusive parsing group.
+            If multiple command line arguments are provided from one
+            group, a <see cref="T:clipr.ParseException"/> will be thrown.
+            </para>
+            <para>
+            If any attribute marks a group as required and and
+            no command line arguments are provided for the group, 
+            a <see cref="T:clipr.ParseException"/> will also be thrown.
+            </para>
+            <para>
+            This attribute only applies to <see cref="T:clipr.NamedArgumentAttribute"/>s.
+            </para>
+            </summary>
+        </member>
+        <member name="M:clipr.MutuallyExclusiveGroupAttribute.#ctor(System.String)">
+            <summary>
+            <para>
+            Subscribes the property to a mutually exclusive parsing group.
+            If multiple command line arguments are provided from one
+            group, a <see cref="T:clipr.ParseException"/> will be thrown.
+            </para>
+            <para>
+            If a group is required and no command line arguments are provided
+            for the group, a <see cref="T:clipr.ParseException"/> will also be thrown.
+            </para>
+            <para>
+            This attribute only applies to <see cref="T:clipr.NamedArgumentAttribute"/>s.
+            </para>
+            </summary>
+        </member>
+        <member name="P:clipr.MutuallyExclusiveGroupAttribute.Name">
+            <summary>
+            Group name.
+            </summary>
+        </member>
+        <member name="P:clipr.MutuallyExclusiveGroupAttribute.Required">
+            <summary>
+            At least one argument in the group must be provided when parsing.
+            </summary>
+        </member>
+        <member name="P:clipr.Fluent.ArgumentBase`3.And">
+            <summary>
+            Finish configuring the current argument and return to the
+            parser.
+            </summary>
+        </member>
+        <member name="T:clipr.Fluent.FluentExtensions">
+            <summary>
+            Poor man's template specialization.
+            </summary>
+        </member>
+        <member name="M:clipr.Fluent.NamedBase`3.WithShortName">
+            <summary>
+            Use the property's lowercased first character as the short
+            argument name.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Fluent.NamedBase`3.WithShortName(System.Char)">
+            <summary>
+            Use the given character as the short argument name.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Fluent.NamedBase`3.WithLongName">
+            <summary>
+            Use the property's lowercased name as the long argument name.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Fluent.NamedBase`3.WithLongName(System.String)">
+            <summary>
+            Use the given name as the long argument name.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:clipr.Core.ParserExit">
+            <summary>
+            Thrown when the parser needs to immediately exit, such as
+            after printing usage or version information.
+            </summary>
+        </member>
+        <member name="M:clipr.Core.ParserExit.#ctor">
+            <summary>
+            Create a new ParserExitException with an
+            exit code of 0.
+            </summary>
+        </member>
+        <member name="M:clipr.Core.ParserExit.#ctor(System.Int32)">
+            <summary>
+            Create a new ParserExitException with the
+            given exit code.
+            </summary>
+            <param name="exitCode"></param>
+        </member>
+        <member name="P:clipr.Core.ParserExit.ExitCode">
+            <summary>
+            Error code to use when exiting.
+            </summary>
+        </member>
+        <member name="M:clipr.Core.ParsingContext`1.Parse(System.String[])">
+            <summary>
+            Parse the given argument list.
+            </summary>
+            <exception cref="T:clipr.ParseException">
+            An error happened while parsing.
+            </exception>
+            <exception cref="T:clipr.Core.ParserExit">
+            Either the help or version information were triggered so
+            parsing was aborted.
+            </exception>
+            <param name="args">Argument list to parse.</param>
+        </member>
+        <member name="M:clipr.Core.ParsingContext`1.ParseArgument(System.String,clipr.Arguments.IArgument,System.Collections.Generic.Stack{System.String})">
+            <summary>
+            Common parsing code, regardless of argument type.
+            </summary>
+            <param name="attrName">
+            Name of the argument (whether short, long, or positional).
+            </param>
+            <param name="arg">Property associated with the argument.</param>
+            <param name="args">List of remaining unparsed arguments.</param>
+        </member>
+        <member name="T:clipr.Triggers.ITrigger`1">
+            <summary>
+            A parser hook that can be triggered by a named argument
+            and executes a function rather than store a value.
+            </summary>
+        </member>
+        <member name="M:clipr.Triggers.ITrigger`1.OnParse(clipr.Core.IParserConfig{`0})">
+            <summary>
+            Method executed when the short or long name is parsed.
+            </summary>
+        </member>
+        <member name="P:clipr.Triggers.ITrigger`1.PluginName">
+            <summary>
+            Name of the plugin.
+            </summary>
+        </member>
+        <member name="T:clipr.Utils.StringExtensions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:clipr.Utils.StringExtensions.Reflow(System.String,System.Int32)">
+            <summary>
+            <para>
+            Strip all newlines from the input string, then return chunks
+            of text of at most <paramref name="maxChars"/> characters.
+            </para>
+            </summary>
+            <param name="text">String to reflow.</param>
+            <param name="maxChars">Maximum number of characters per line.</param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Utils.StringExtensions.ReflowWords(System.String,System.Int32)">
+            <summary>
+            <para>
+            Strip all newlines from the input string, then return chunks
+            of text of at most <paramref name="maxChars"/> characters.
+            </para>
+            <para>
+            If a word (defined as consecutive characters that aren't
+            spaces or tabs) is being split,
+            the line will return up to the last whole word. If a word's
+            length is longer than <paramref name="maxChars"/>, it will
+            be forced to split across multiple lines.
+            </para>
+            <para>
+            If multiple separator characters occur at a line boundary, they
+            will be removed.
+            </para>
+            </summary>
+            <param name="text">String to reflow.</param>
+            <param name="maxChars">Maximum number of characters per line.</param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Utils.StringExtensions.ReflowWords(System.String,System.Int32,System.Char[])">
+            <summary>
+            <para>
+            Strip all newlines from the input string, then return chunks
+            of text of at most <paramref name="maxChars"/> characters.
+            </para>
+            <para>
+            If a word (defined as consecutive characters that aren't
+            given in <paramref name="separators"/>) is being split,
+            the line will return up to the last whole word. If a word's
+            length is longer than <paramref name="maxChars"/>, it will
+            be forced to split across multiple lines.
+            </para>
+            <para>
+            If multiple separator characters occur at a line boundary, they
+            will be removed.
+            </para>
+            </summary>
+            <param name="text">String to reflow.</param>
+            <param name="maxChars">Maximum number of characters per line.</param>
+            <param name="separators">Array of valid separator characters.</param>
+            <returns></returns>
+        </member>
+        <member name="T:clipr.Triggers.TriggerBase">
+            <summary>
+            Base properties of a trigger.
+            </summary>
+        </member>
+        <member name="P:clipr.Triggers.TriggerBase.MutuallyExclusiveGroups">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Triggers.TriggerBase.ConsumesMultipleArgs">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Triggers.TriggerBase.Const">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Triggers.TriggerBase.ShortName">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Triggers.TriggerBase.LongName">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Triggers.TriggerBase.Required">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Triggers.TriggerBase.MetaVar">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Triggers.TriggerBase.Store">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Triggers.TriggerBase.Name">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Triggers.TriggerBase.Description">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Triggers.TriggerBase.Action">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Triggers.TriggerBase.NumArgs">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Triggers.TriggerBase.Constraint">
+            <inheritdoc/>
+        </member>
+        <member name="T:clipr.Usage.ExecutingAssemblyVersion`1">
+            <summary>
+            Version information pulled from the currently executing assembly.
+            </summary>
+        </member>
+        <member name="T:clipr.Usage.IVersion`1">
+            <summary>
+            Program version information.
+            </summary>
+        </member>
+        <member name="M:clipr.Usage.IVersion`1.GetVersion">
+            <summary>
+            The version string.
+            </summary>
+            <returns>A string containing version information.</returns>
+        </member>
+        <member name="M:clipr.Usage.ExecutingAssemblyVersion`1.#ctor">
+            <summary>
+            Version information pulled from the currently executing assembly.
+            </summary>
+        </member>
+        <member name="M:clipr.Usage.ExecutingAssemblyVersion`1.GetVersion">
+            <summary>
+            Get the version of this application.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Usage.ExecutingAssemblyVersion`1.OnParse(clipr.Core.IParserConfig{`0})">
+            <summary>
+            Action to perform when trigger is parsed.
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="P:clipr.Usage.ExecutingAssemblyVersion`1.Name">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Usage.ExecutingAssemblyVersion`1.PluginName">
+            <summary>
+            Get the name of this plugin.
+            </summary>
+        </member>
+        <member name="P:clipr.Usage.ExecutingAssemblyVersion`1.Description">
+            <inheritdoc/>
+        </member>
+        <member name="T:clipr.PostParseAttribute">
+            <summary>
+            Methods marked with this attribute will be run after
+            parsing has completed (successfully).
+            
+            Method must have no parameters.
+            </summary>
+        </member>
+        <member name="T:clipr.VerbAttribute">
+            <summary>
+            Mark the property as a subcommand. (cf. 'svn checkout')
+            </summary>
+        </member>
+        <member name="M:clipr.VerbAttribute.#ctor">
+            <summary>
+            Create a new subcommand.
+            </summary>
+        </member>
+        <member name="M:clipr.VerbAttribute.#ctor(System.String)">
+            <summary>
+            Create a new subcommand.
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="M:clipr.VerbAttribute.#ctor(System.String,System.String)">
+            <summary>
+            Create a new subcommand.
+            </summary>
+            <param name="name"></param>
+            <param name="description"></param>
+        </member>
+        <member name="P:clipr.VerbAttribute.Name">
+            <summary>
+            Name of the subcommand. If provided as an argument, it
+            will trigger parsing of the subcommand.
+            </summary>
+        </member>
+        <member name="P:clipr.VerbAttribute.Description">
+            <summary>
+            Description of the subcommand, suitable for help pages.
+            </summary>
+        </member>
+        <member name="T:clipr.Usage.AutomaticHelpGenerator`1">
+            <summary>
+            Builds usage information automatically from the associated
+            type.
+            </summary>
+            <typeparam name="T">Type to inspect.</typeparam>
+        </member>
+        <member name="T:clipr.Usage.IHelpGenerator`1">
+            <summary>
+            Generates help documentation for a parser.
+            </summary>
+        </member>
+        <member name="M:clipr.Usage.IHelpGenerator`1.GetUsage">
+            <summary>
+            Build a short string displaying the order and number of 
+            optional and required parameters.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Usage.IHelpGenerator`1.GetHelp(clipr.Core.IParserConfig{`0})">
+            <summary>
+            Build a complete description of valid options.
+            </summary>
+            <param name="config">Configuration settings.</param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Usage.AutomaticHelpGenerator`1.#ctor">
+            <summary>
+            Create a new generator.
+            </summary>
+        </member>
+        <member name="M:clipr.Usage.AutomaticHelpGenerator`1.GetUsage">
+            <summary>
+            Get the usage as a string.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Usage.AutomaticHelpGenerator`1.GetHelp(clipr.Core.IParserConfig{`0})">
+            <summary>
+            Get all help information.
+            </summary>
+            <param name="config"></param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Usage.AutomaticHelpGenerator`1.OnParse(clipr.Core.IParserConfig{`0})">
+            <summary>
+            Action to perform when this trigger is parsed.
+            </summary>
+            <param name="config"></param>
+        </member>
+        <member name="P:clipr.Usage.AutomaticHelpGenerator`1.Name">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Usage.AutomaticHelpGenerator`1.Description">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.Usage.AutomaticHelpGenerator`1.VersionDescription">
+            <summary>
+            Description for the version help.
+            </summary>
+        </member>
+        <member name="P:clipr.Usage.AutomaticHelpGenerator`1.UsageTitle">
+            <summary>
+            Title of the usage section.
+            </summary>
+        </member>
+        <member name="P:clipr.Usage.AutomaticHelpGenerator`1.PositionalArgumentsTitle">
+            <summary>
+            Title of the positional arguments section.
+            </summary>
+        </member>
+        <member name="P:clipr.Usage.AutomaticHelpGenerator`1.OptionalArgumentsTitle">
+            <summary>
+            Title of the optional arguments section.
+            </summary>
+        </member>
+        <member name="P:clipr.Usage.AutomaticHelpGenerator`1.PluginName">
+            <summary>
+            Name of the plugin.
+            </summary>
+        </member>
+        <member name="T:clipr.DuplicateArgumentException">
+            <summary>
+            Multiple arguments with the same name have been defined.
+            </summary>
+        </member>
+        <member name="M:clipr.DuplicateArgumentException.#ctor(System.String)">
+            <summary>
+            Multiple arguments with the same name have been defined.
+            </summary>
+            <param name="argumentName">Name of the duplicate argument.</param>
+        </member>
+        <member name="T:clipr.NamedArgumentAttribute">
+            <summary>
+            An argument triggered by either a short or long name.
+            </summary>
+        </member>
+        <member name="M:clipr.NamedArgumentAttribute.#ctor(System.Char)">
+            <summary>
+            Create a new named argument with only a short name.
+            </summary>
+            <param name="shortName"></param>
+        </member>
+        <member name="M:clipr.NamedArgumentAttribute.#ctor(System.String)">
+            <summary>
+            Create a new named argument with only a long name.
+            </summary>
+            <param name="longName"></param>
+        </member>
+        <member name="M:clipr.NamedArgumentAttribute.#ctor(System.Char,System.String)">
+            <summary>
+            Create a new named argument with both a short and long name.
+            </summary>
+            <param name="shortName"></param>
+            <param name="longName"></param>
+        </member>
+        <member name="P:clipr.NamedArgumentAttribute.ShortName">
+            <summary>
+            Single character name for the argument.
+            </summary>
+        </member>
+        <member name="P:clipr.NamedArgumentAttribute.LongName">
+            <summary>
+            Longer, multi-character name for the argument.
+            </summary>
+        </member>
+        <member name="P:clipr.NamedArgumentAttribute.Required">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.NamedArgumentAttribute.MetaVar">
+            <summary>
+            An argument name suitable for displaying on a help page.
+            
+            Defaults to either the short or long name.
+            </summary>
+        </member>
+        <member name="T:clipr.NumArgsConstraint">
+            <summary>
+            Indicates the range of argument values
+            that may be parsed by the argument.
+            </summary>
+        </member>
+        <member name="F:clipr.NumArgsConstraint.Exactly">
+            <summary>
+            The parameter must provide exactly this number of arguments.
+            </summary>
+        </member>
+        <member name="F:clipr.NumArgsConstraint.AtLeast">
+            <summary>
+            The parameter must provide at least this number of arguments.
+            </summary>
+        </member>
+        <member name="F:clipr.NumArgsConstraint.AtMost">
+            <summary>
+            The parameter must provide at most this number of arguments.
+            </summary>
+        </member>
+        <member name="T:clipr.ParseAction">
+            <summary>
+            Action performed when an argument is parsed. Determines whether or
+            not the argument consumes values and what is stored in the
+            argument property.
+            </summary>
+        </member>
+        <member name="F:clipr.ParseAction.Store">
+            <summary>
+            <para>
+            Convert the next value in the argument list and store it.
+            If specified multiple times, overwrite previous value.
+            </para>
+            <para>
+            This <see cref="T:clipr.ParseAction"/> consumes arguments.
+            </para>
+            </summary>
+        </member>
+        <member name="F:clipr.ParseAction.StoreConst">
+            <summary>
+            <para>
+            Store the value <see cref="P:clipr.Core.ArgumentAttribute.Const"/>
+            instead of an argument value.
+            </para>
+            <para>
+            This <see cref="T:clipr.ParseAction"/> does not consume arguments.
+            </para>
+            </summary>
+        </member>
+        <member name="F:clipr.ParseAction.StoreTrue">
+            <summary>
+            <para>
+            Store the value <value>true</value> instead of an argument value.
+            </para>
+            <para>
+            This <see cref="T:clipr.ParseAction"/> does not consume arguments.
+            </para>
+            </summary>
+        </member>
+        <member name="F:clipr.ParseAction.StoreFalse">
+            <summary>
+            <para>
+            Store the value <value>false</value> instead of an argument value.
+            </para>
+            <para>
+            This <see cref="T:clipr.ParseAction"/> does not consume arguments.
+            </para>
+            </summary>
+        </member>
+        <member name="F:clipr.ParseAction.Append">
+            <summary>
+            <para>
+            Convert the next value(s) in the argument list and append.
+            </para>
+            <para>
+            This action must be used on an instance of
+            <see cref="T:System.Collections.IEnumerable"/> and if this argument is specified
+            multiple times, values are appended to the list rather
+            than overwritten.
+            </para>
+            <para>
+            This <see cref="T:clipr.ParseAction"/> consumes arguments.
+            </para>
+            </summary>
+        </member>
+        <member name="F:clipr.ParseAction.AppendConst">
+            <summary>
+            <para>
+            Append the value <see cref="P:clipr.Core.ArgumentAttribute.Const"/> to
+            this property.
+            </para>
+            <para>
+            This action must be used on an instance of
+            <see cref="T:System.Collections.IEnumerable"/> and if this argument is specified
+            multiple times, values are appended to the list rather
+            than overwritten.
+            </para>
+            <para>
+            This <see cref="T:clipr.ParseAction"/> does not consume arguments.
+            </para>
+            </summary>
+        </member>
+        <member name="F:clipr.ParseAction.Count">
+            <summary>
+            <para>
+            Increment the value of this property by 1 every time it is
+            specified.
+            </para>
+            <para>
+            This action must be used on a <see cref="T:System.Int32"/>.
+            </para>
+            <para>
+            This <see cref="T:clipr.ParseAction"/> does not consume arguments.
+            </para>
+            </summary>
+        </member>
+        <member name="M:clipr.ParseActionExtensions.ConsumesArgumentValues(clipr.ParseAction)">
+            <summary>
+            Indicates whether or not an action has the potential to
+            consume argument values.
+            </summary>
+            <param name="action">Action to test.</param>
+            <returns>true if the action consumes values, false otherwise</returns>
+        </member>
+        <member name="T:clipr.ParseException">
+            <summary>
+            Represents an error that ocurred during parsing.
+            </summary>
+        </member>
+        <member name="M:clipr.ParseException.#ctor(System.Char)">
+            <summary>
+            Create a new ParseException for a token.
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="M:clipr.ParseException.#ctor(System.Char,System.String)">
+            <summary>
+            Create a new ParseException for a token and supply a message.
+            </summary>
+            <param name="token"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:clipr.ParseException.#ctor(System.Char,System.String,System.Exception)">
+            <summary>
+            Create a new ParseException for a token and supply a message
+            and inner exception.
+            </summary>
+            <param name="token"></param>
+            <param name="message"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="M:clipr.ParseException.#ctor(System.String)">
+            <summary>
+            Create a new ParseException for a token.
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="M:clipr.ParseException.#ctor(System.String,System.String)">
+            <summary>
+            Create a new ParseException for a token and supply a message.
+            </summary>
+            <param name="token"></param>
+            <param name="message"></param>
+        </member>
+        <member name="M:clipr.ParseException.#ctor(System.String,System.String,System.Exception)">
+            <summary>
+            Create a new ParseException for a token and supply a message
+            and inner exception.
+            </summary>
+            <param name="token"></param>
+            <param name="message"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="M:clipr.ParseException.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="P:clipr.ParseException.Token">
+            <summary>
+            The parse token, if any, that caused the error.
+            </summary>
+        </member>
+        <member name="T:clipr.ParserOptions">
+            <summary>
+            Extra options that may be supplied to the parser.
+            </summary>
+        </member>
+        <member name="F:clipr.ParserOptions.None">
+            <summary>
+            Add no extra options.
+            </summary>
+        </member>
+        <member name="F:clipr.ParserOptions.CaseInsensitive">
+            <summary>
+            Make short and long argument comparisons case insensitive.
+            </summary>
+        </member>
+        <member name="T:clipr.PositionalArgumentAttribute">
+            <summary>
+            <para>
+            A required argument, ordered based on Index in ascending order.
+            </para>
+            <para>
+            Only the last argument in the positional list may have
+            a variable number of argument values.
+            </para>
+            </summary>
+        </member>
+        <member name="M:clipr.PositionalArgumentAttribute.#ctor(System.Int32)">
+            <summary>
+            Create a new positional argument at the given index.
+            </summary>
+            <param name="index">Positional index.</param>
+        </member>
+        <member name="P:clipr.PositionalArgumentAttribute.Index">
+            <summary>
+            Index in the positional argument list for this argument.
+            </summary>
+        </member>
+        <member name="T:clipr.Usage.ResourceUsageGenerator`1">
+            <summary>
+            Generate usage information from localizable resource files.
+            </summary>
+        </member>
+        <member name="M:clipr.Usage.ResourceUsageGenerator`1.#ctor">
+            <summary>
+            Create a new usage generator with the
+            default argument names (-h and --help).
+            </summary>
+        </member>
+        <member name="T:clipr.Utils.StringTypeConverter`1">
+            <summary>
+            Provides a simpler abstraction to the <see cref="T:System.ComponentModel.TypeConverter"/>
+            interface allowing users to specify custom conversion methods
+            between the command line arguments (as strings) and their
+            custom type. This is solely a convenience class, normal
+            <see cref="T:System.ComponentModel.TypeConverter"/>s will be handled correctly as well.
+            </summary>
+            <typeparam name="T">Custom destination type.</typeparam>
+        </member>
+        <member name="M:clipr.Utils.StringTypeConverter`1.CanConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:clipr.Utils.StringTypeConverter`1.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:clipr.Utils.StringTypeConverter`1.ConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:clipr.Utils.StringTypeConverter`1.ConvertFrom(System.Globalization.CultureInfo,System.String)">
+            <summary>
+            Convert the string value to an instance of
+            <typeparamref name="T"/>.
+            </summary>
+            <param name="culture">
+            The <see cref="T:System.Globalization.CultureInfo"/> to use as
+            the current culture.
+            </param>
+            <param name="value">String value to transform.</param>
+            <returns></returns>
+        </member>
+        <member name="M:clipr.Utils.StringTypeConverter`1.IsValid(System.ComponentModel.ITypeDescriptorContext,System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:clipr.Utils.StringTypeConverter`1.IsValid(System.String)">
+            <summary>
+            Identify whether or not the string can be converted to
+            <typeparamref name="T" />.
+            </summary>
+            <param name="value">String value to transform.</param>
+            <returns>True if string is convertible.</returns>
+        </member>
+    </members>
+</doc>
