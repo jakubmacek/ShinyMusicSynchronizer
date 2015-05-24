@@ -41,21 +41,21 @@ namespace ShinyMusicSynchronizer
         private readonly Options _options;
         private readonly ApplicationInformation _applicationInformation;
         private readonly PortableDeviceCollection _portableDeviceCollection;
-        private readonly IMessageReporter _messageReporter;
+        private readonly IUserInterface _userInterface;
 
         private SynchronizedRootDirectory Root { get; set; }
 
-        public SynchronizeCommand(Options options, PortableDeviceCollection portableDeviceCollection, IMessageReporter messageReporter, ApplicationInformation applicationInformation)
+        public SynchronizeCommand(Options options, PortableDeviceCollection portableDeviceCollection, IUserInterface userInterface, ApplicationInformation applicationInformation)
         {
             Contract.Assert(options != null);
             Contract.Assert(applicationInformation != null);
             Contract.Assert(portableDeviceCollection != null);
-            Contract.Assert(messageReporter != null);
+            Contract.Assert(userInterface != null);
 
             _options = options;
             _applicationInformation = applicationInformation;
             _portableDeviceCollection = portableDeviceCollection;
-            _messageReporter = messageReporter;
+            _userInterface = userInterface;
         }
 
         private PortableDevice GetSelectedPortableDevice()
@@ -82,7 +82,9 @@ namespace ShinyMusicSynchronizer
             UpdateComputerRoot();
 
             DisplayRoot();
-            Synchronize(device);
+            var shouldSynchronize = _userInterface.AskConfirmation("Synchronize?");
+            if (shouldSynchronize)
+                Synchronize(device);
 
             device.Disconnect();
         }
@@ -99,13 +101,13 @@ namespace ShinyMusicSynchronizer
 
             if (operation == SynchronizationOperation.Copy)
             {                
-                _messageReporter.ReportInformation(string.Format("Create directory {0}", parentDirectory.Path));
+                _userInterface.ReportInformation(string.Format("Create directory {0}", parentDirectory.Path));
                 DoOperation(storageServiceAdapter, parentDirectory);
             }
 
             foreach (var file in parentDirectory.Files.Where(file => file.Operation == SynchronizationOperation.Delete))
             {
-                _messageReporter.ReportInformation(string.Format("Delete file      {0}", file.Path));
+                _userInterface.ReportInformation(string.Format("Delete file      {0}", file.Path));
                 DoOperation(storageServiceAdapter, file);
             }
 
@@ -116,13 +118,13 @@ namespace ShinyMusicSynchronizer
 
             foreach (var file in parentDirectory.Files.Where(file => file.Operation == SynchronizationOperation.Copy))
             {
-                _messageReporter.ReportInformation(string.Format("Copy file        {0}", file.Path));
+                _userInterface.ReportInformation(string.Format("Copy file        {0}", file.Path));
                 DoOperation(storageServiceAdapter, file);
             }
 
             if (operation == SynchronizationOperation.Delete)
             {
-                _messageReporter.ReportInformation(string.Format("Delete directory {0}", parentDirectory.Path));
+                _userInterface.ReportInformation(string.Format("Delete directory {0}", parentDirectory.Path));
                 DoOperation(storageServiceAdapter, parentDirectory);
             }
         }
@@ -147,7 +149,7 @@ namespace ShinyMusicSynchronizer
             }
             catch (Exception e)
             {
-                _messageReporter.ReportError(string.Format("Exception: {0}", e.Message));
+                _userInterface.ReportError(string.Format("Exception: {0}", e.Message));
             }
         }
 
@@ -168,7 +170,7 @@ namespace ShinyMusicSynchronizer
                 {
                     StorageServicesAdapter.PushProgressReport pushProgressReport = (int totalBytesRead) =>
                     {
-                        _messageReporter.ReportInformation(string.Format("\tCopy: {0} out of {1} = {2}%",
+                        _userInterface.ReportInformation(string.Format("\tCopy: {0} out of {1} = {2}%",
                             FormatFileSize(totalBytesRead),
                             FormatFileSize(file.SizeOnComputer),
                             100 * totalBytesRead / file.SizeOnComputer
@@ -181,7 +183,7 @@ namespace ShinyMusicSynchronizer
             }
             catch (Exception e)
             {
-                _messageReporter.ReportError(string.Format("Exception: {0}", e.Message));
+                _userInterface.ReportError(string.Format("Exception: {0}", e.Message));
             }
         }
 
@@ -204,7 +206,7 @@ namespace ShinyMusicSynchronizer
                 if (file.Operation == SynchronizationOperation.Keep)
                     continue;
 
-                _messageReporter.ReportInformation(string.Format("{0} {1} {2,-6} {3,11} {4,11}",
+                _userInterface.ReportInformation(string.Format("{0} {1} {2,-6} {3,11} {4,11}",
                     depthIndentation,
                     file.Name.PadRight(width - depthIndentation.Length),
                     file.Operation.ToString(),
@@ -218,7 +220,7 @@ namespace ShinyMusicSynchronizer
                 //if (directory.Operation == SynchronizationOperation.Delete)
                 //    File.WriteAllText(Path.Combine(Path.Combine(RootComputerPath, directory.Path), SynchronizationMarkerFileName), "");
 
-                _messageReporter.ReportInformation(string.Format("{0} {1} {2,-6}",
+                _userInterface.ReportInformation(string.Format("{0} {1} {2,-6}",
                     depthIndentation,
                     directory.Name.PadRight(width - depthIndentation.Length),
                     directory.Operation.ToString()
@@ -243,7 +245,7 @@ namespace ShinyMusicSynchronizer
                 {
                     if (child.Name == _options.SynchronizationMarkerFileName)
                         continue;
-                    var file = parentDirectory.Files.FirstOrDefault(x => x.Name == child.Name);
+                    var file = parentDirectory.Files.FirstOrDefault(x => x.Name.ToLower() == child.Name.ToLower());
                     if (file == null)
                     {
                         file = new SynchronizedFile();
@@ -260,7 +262,7 @@ namespace ShinyMusicSynchronizer
 
             foreach (var child in container.GetDirectories())
             {
-                var directory = parentDirectory.Directories.FirstOrDefault(x => x.Name == child.Name);
+                var directory = parentDirectory.Directories.FirstOrDefault(x => x.Name.ToLower() == child.Name.ToLower());
                 if (directory == null)
                 {
                     directory = new SynchronizedDirectory();

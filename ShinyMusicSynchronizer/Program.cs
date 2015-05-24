@@ -64,8 +64,8 @@ namespace ShinyMusicSynchronizer
             container.Register<ApplicationInformation>(c => new ApplicationInformation("ShinyMusicSynchronizer", 1, 0), new PerContainerLifetime());
             container.Register<PortableDeviceCollection>(c => CreatePortableDeviceCollectionFromApplicationInformation(c.GetInstance<ApplicationInformation>()));
 
-            container.Register<IMessageReporter, ConsoleMessageReporter>(new PerContainerLifetime());
-            container.Register<Action<ICommandMessage>>(c => new Action<ICommandMessage>(c.GetInstance<IMessageReporter>().ReportMessage));
+            container.Register<IUserInterface, ConsoleUserInterface>(new PerContainerLifetime());
+            container.Register<Action<ICommandMessage>>(c => new Action<ICommandMessage>(c.GetInstance<IUserInterface>().ReportMessage));
 
             container.Register<Options>(c => CliParser.StrictParse<Options>(args), new PerContainerLifetime());
             container.Register<OptionsToCommandParser, OptionsToCommandParser>();

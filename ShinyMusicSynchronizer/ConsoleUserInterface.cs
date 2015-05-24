@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShinyMusicSynchronizer
 {
-    class ConsoleMessageReporter : IMessageReporter
+    class ConsoleUserInterface : IUserInterface
     {
         public void ReportMessage(ICommandMessage message)
         {
@@ -24,6 +24,18 @@ namespace ShinyMusicSynchronizer
         public void ReportError(string message)
         {
             Console.Error.WriteLine(message);
+        }
+
+        public bool AskConfirmation(string question)
+        {
+            Console.Out.WriteLine(question);
+            Console.Out.Write("[Y/N] ");
+            var key = Console.ReadKey();
+            Console.Out.WriteLine();
+            if ((key.KeyChar == 'y') || (key.KeyChar == 'Y'))
+                return true;
+            else
+                return false;
         }
     }
 }

@@ -17,19 +17,19 @@ namespace ShinyMusicSynchronizer
         private readonly Options _options;
         private readonly ApplicationInformation _applicationInformation;
         private readonly PortableDeviceCollection _portableDeviceCollection;
-        private readonly IMessageReporter _messageReporter;
+        private readonly IUserInterface _userInterface;
 
-        public ListDevicesCommand(Options options, PortableDeviceCollection portableDeviceCollection, IMessageReporter messageReporter, ApplicationInformation applicationInformation)
+        public ListDevicesCommand(Options options, PortableDeviceCollection portableDeviceCollection, IUserInterface userInterface, ApplicationInformation applicationInformation)
         {
             Contract.Assert(options != null);
             Contract.Assert(applicationInformation != null);
             Contract.Assert(portableDeviceCollection != null);
-            Contract.Assert(messageReporter != null);
+            Contract.Assert(userInterface != null);
 
             _options = options;
             _applicationInformation = applicationInformation;
             _portableDeviceCollection = portableDeviceCollection;
-            _messageReporter = messageReporter;
+            _userInterface = userInterface;
         }
 
         public void Execute()
@@ -38,7 +38,7 @@ namespace ShinyMusicSynchronizer
             {
                 device.ConnectToDevice(_applicationInformation.Name, _applicationInformation.MajorVersionNumber, _applicationInformation.MinorVersionNumber);
                 var message = string.Format("Device: {0}\n\tModel: {1}\n\tFriendly name: {2}\n", device.DeviceId, device.Model, device.FriendlyName);
-                _messageReporter.ReportInformation(message);
+                _userInterface.ReportInformation(message);
             }
         }
     }

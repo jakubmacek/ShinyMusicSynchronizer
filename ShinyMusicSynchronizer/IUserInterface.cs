@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace ShinyMusicSynchronizer
 {
-    interface IMessageReporter
+    interface IUserInterface
     {
         void ReportMessage(ICommandMessage message);
 
         void ReportInformation(string message);
 
         void ReportError(string message);
+
+        bool AskConfirmation(string question);
     }
 }

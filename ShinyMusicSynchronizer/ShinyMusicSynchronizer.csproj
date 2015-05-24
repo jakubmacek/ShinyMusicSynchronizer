@@ -65,8 +65,8 @@
   <ItemGroup>
     <Compile Include="ApplicationInformation.cs" />
     <Compile Include="CommandMessageType.cs" />
-    <Compile Include="ConsoleMessageReporter.cs" />
-    <Compile Include="IMessageReporter.cs" />
+    <Compile Include="ConsoleUserInterface.cs" />
+    <Compile Include="IUserInterface.cs" />
     <Compile Include="SynchronizationOperation.cs" />
     <Compile Include="SynchronizeCommand.cs" />
     <Compile Include="SimpleCommandMessage.cs" />
